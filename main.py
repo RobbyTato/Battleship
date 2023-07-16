@@ -20,7 +20,7 @@ o888bood8P'  `Y888""8o   "888"   "888" o888o `Y8bod8P' 8""888P' o888o o888o o888
 '''
 
 controls = '''
-  🡅          W
+⠀ 🡅          W
 🡄   🡆  or  A   D to navigate
   🡇          S
    
@@ -37,7 +37,7 @@ def menu_screen():
     while True:
 
         # process keyboard input
-        key = keyboard.read_event(suppress=True)
+        key = keyboard.read_event()
         if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter"):
             continue
         if key.name in ("s", "down"):
@@ -157,6 +157,6 @@ if __name__ == "__main__":
             game()
         if choice == "Controls":
             ps.print_screen(controls)
-            keyboard.wait('enter', suppress=True)
+            keyboard.wait('enter')
         if choice == "Exit":
             break
