@@ -9,4 +9,4 @@ A remake of the board game Battleship™ written entirely in Python.
 ### Credits
 ***
 
-Created by Ebil Jacob (RobbyTato) and Ravin ? (?) as a final project for the Summer EDGE program in Carnegie Mellon University Qatar.
+Created by Ebil Jacob (RobbyTato) and Ravin Kumar (Ravin-Kumar) as a final project for the Summer EDGE program in Carnegie Mellon University Qatar.
