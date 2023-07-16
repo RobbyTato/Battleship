@@ -21,7 +21,7 @@ o888bood8P'  `Y888""8o   "888"   "888" o888o `Y8bod8P' 8""888P' o888o o888o o888
 '''
 
 controls = '''
-⠀ 🡅          W
+  🡅          W
 🡄   🡆  or  A   D to navigate
   🡇          S
    
@@ -66,6 +66,8 @@ def menu_screen():
 
 
 if __name__ == "__main__":
+
+
     while True:
         option = menu_screen()
         if option == "Play":
@@ -76,6 +78,7 @@ if __name__ == "__main__":
         if option == "Exit":
             break
 
+    # test change
 
 
 
