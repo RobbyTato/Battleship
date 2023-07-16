@@ -1,7 +1,6 @@
 import keyboard
 import print_screen as ps
 import colorama
-import sys
 from colorama import Fore, Back, Style
 
 colorama.init()
@@ -152,8 +151,6 @@ def game():
 
 
 if __name__ == "__main__":
-
-
     while True:
         choice = menu_screen()
         if choice == "Play":
@@ -163,8 +160,3 @@ if __name__ == "__main__":
             keyboard.wait('enter', suppress=True)
         if choice == "Exit":
             break
-
-    # test change
-
-
-
