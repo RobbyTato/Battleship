@@ -31,7 +31,7 @@ controls = '''
 
 def menu_screen():
     menu_options = ["Play", "Controls", "Exit"]
-    current_option = 0
+    option = 0
     menu_text = ps.add_lines(["", "⮞  " + Back.WHITE + Fore.BLACK + "Play" + Style.RESET_ALL + "  ⮜", "", "Controls", "", "Exit"], title, center=True)
     ps.print_screen(menu_text)
 
@@ -42,38 +42,124 @@ def menu_screen():
         if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter"):
             continue
         if key.name in ("s", "down"):
-            if current_option == len(menu_options) - 1:
-                current_option = 0
+            if option == len(menu_options) - 1:
+                option = 0
             else:
-                current_option += 1
+                option += 1
         if key.name in ("w", "up"):
-            if current_option == 0:
-                current_option = len(menu_options) - 1
+            if option == 0:
+                option = len(menu_options) - 1
             else:
-                current_option -= 1
+                option -= 1
         if key.name == "enter":
-            return menu_options[current_option]
+            return menu_options[option]
 
         # reload menu
         b = title
         for i in range(len(menu_options)):
             b = ps.add_line("", b)
-            if i == current_option:
+            if i == option:
                 b = ps.add_line("⮞  " + Back.WHITE + Fore.BLACK + menu_options[i] + Style.RESET_ALL + "  ⮜", b, center=True)
             else:
                 b = ps.add_line(menu_options[i], b, center=True)
         ps.print_screen(b)
 
 
+def enemy_move(shot_board):
+    """
+    Function which gives the move that the enemy should make using AI
+    :param shot_board: The shot board of the enemy
+    :return: (x, y)
+    """
+
+
+def player_move(shot_board):
+    """
+    Function which gives the move that the player should make using the keyboard
+    :param shot_board: The shot board of the player
+    :return: (x, y)
+    """
+
+
+def game():
+
+    # 10 x 10 board grid
+
+    # Ship name     Ship size    Name on board (eg. "c")
+    # Carrier	    5            c
+    # Battleship    4            b
+    # Destroyer	    3            d
+    # Submarine	    3            s
+    # Patrol Boat   2            p
+
+    # Player's board to place ships
+    p_ship_board = [
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+    ]
+
+    # Enemy's board to place ships
+    e_ship_board = [
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+    ]
+
+    # Only strings in the shot boards are "hit", "miss" and ""
+
+    # Player's board to record shots
+    p_shot_board = [
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+    ]
+
+    # Enemy's board to record shots
+    e_shot_board = [
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", ""],
+    ]
+
+
 if __name__ == "__main__":
     while True:
-        option = menu_screen()
-        if option == "Play":
-            pass
-        if option == "Controls":
+        choice = menu_screen()
+        if choice == "Play":
+            game()
+        if choice == "Controls":
             ps.print_screen(controls)
             keyboard.wait('enter', suppress=True)
-        if option == "Exit":
+        if choice == "Exit":
             break
 
 
