@@ -22,7 +22,7 @@ o888bood8P'  `Y888""8o   "888"   "888" o888o `Y8bod8P' 8""888P' o888o o888o o888
 
 controls = '''
   🡅          W
-🡄   🡆  or  A   D to navigate
+🡄  🡆  or  A  D to navigate
   🡇          S
    
     Enter to select/confirm
@@ -78,7 +78,6 @@ if __name__ == "__main__":
         if option == "Exit":
             break
 
-    # test change
 
 
 
