@@ -1,6 +1,8 @@
 import keyboard
 import print_screen as ps
 import colorama
+from player import Player
+from bot import Bot
 from colorama import Fore, Back, Style
 
 colorama.init()
@@ -66,22 +68,6 @@ def menu_screen():
         ps.print_screen(b)
 
 
-def enemy_move(shot_board):
-    """
-    Function which gives the move that the enemy should make using AI
-    :param shot_board: The shot board of the enemy
-    :return: (x, y)
-    """
-
-
-def player_move(shot_board):
-    """
-    Function which gives the move that the player should make using the keyboard
-    :param shot_board: The shot board of the player
-    :return: (x, y)
-    """
-
-
 def game():
     # 10 x 10 board grid
 
@@ -92,19 +78,10 @@ def game():
     # Submarine	    3            s
     # Patrol Boat   2            p
 
-    # Player's board to place ships
-    p_ship_board = [["-" for _ in range(10)] for _ in range(10)]
-
-    # Enemy's board to place ships
-    e_ship_board = [["-" for _ in range(10)] for _ in range(10)]
-
     # Only strings in the shot boards are "O" for miss, "X" for hit but not sunk "+" for hit and sunk and "-"
 
-    # Player's board to record shots
-    p_shot_board = [["-" for _ in range(10)] for _ in range(10)]
-
-    # Enemy's board to record shots
-    e_shot_board = [["-" for _ in range(10)] for _ in range(10)]
+    player = Player()
+    bot = Bot()
 
 
 if __name__ == "__main__":
