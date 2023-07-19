@@ -1,9 +1,12 @@
 import keyboard
 import print_screen as ps
 import colorama
+import logging
 from player import Player
 from bot import Bot
 from colorama import Fore, Back, Style
+
+logging.basicConfig(level=logging.DEBUG, filename="logs.txt", filemode="w", format="%(message)s")
 
 colorama.init()
 
@@ -78,12 +81,13 @@ def game():
     # Submarine	    3            s
     # Patrol Boat   2            p
 
-    # Only strings in the shot boards are "O" for miss, "X" for hit but not sunk "+" for hit and sunk and "-"
+    # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
 
     player = Player()
     bot = Bot()
 
     player.setup_ships()
+    logging.debug(str(player.ship_board))
 
 
 if __name__ == "__main__":
