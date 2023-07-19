@@ -83,6 +83,8 @@ def game():
     player = Player()
     bot = Bot()
 
+    player.setup_ships()
+
 
 if __name__ == "__main__":
     while True:
