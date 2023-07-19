@@ -98,9 +98,9 @@ class Player:
                 self.display_ship_board(extra=extra)
 
     def ship_board_to_string(self, extra=None):
-        s = "╔" + ("═" * 40) + "╗\n"  # first row
+        s = Fore.GREEN + "▟" + ("▄" * 40) + "▙\n" + Style.RESET_ALL  # first row
         for x in range(10):  # add the board
-            line = "║"
+            line = Fore.GREEN + "▐" + Style.RESET_ALL
             for y in range(10):
                 if extra is None:
                     if self.ship_board[x][y] == "-":
@@ -117,13 +117,12 @@ class Player:
                             line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
                         else:
                             line += Back.LIGHTBLACK_EX + "    " + Style.RESET_ALL
-            line += "║\n"
+            line += Fore.GREEN + "▌\n" + Style.RESET_ALL
             s += line * 2
-        s += "╚" + ("═" * 40) + "╝"  # last row
+        s += Fore.GREEN + "▜" + ("▀" * 40) + "▛" + Style.RESET_ALL  # last row
         return s
 
     def display_ship_board(self, extra=None):
         ps.print_screen(self.ship_board_to_string(extra))
 
-    def find_next_move(self):
-        pass
+
