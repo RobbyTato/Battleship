@@ -70,7 +70,6 @@ def menu_screen():
                 b = ps.add_line(menu_options[i], b, center=True)
         ps.print_screen(b)
 
-
 def game():
     # 10 x 10 board grid
 
@@ -89,6 +88,20 @@ def game():
     player.setup_ships()
     logging.debug(str(player.ship_board))
 
+def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
+
+    enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
+    player_shot_value = player_shot_board[pos[0]][pos[1]]
+
+    if enemy_ship_value in ('c','d','b','s','p'):
+        enemy_ship_value = enemy_ship_value + '+'
+        player_shot_value = 'X'
+    else:
+        player_shot_value = 'O'
+
+def check_sunk(player_board, enemy_board):
+
+    pass
 
 if __name__ == "__main__":
     while True:
