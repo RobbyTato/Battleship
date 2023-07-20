@@ -2,14 +2,14 @@ import logging
 import keyboard
 from colorama import Fore, Back, Style
 import print_screen as ps
+from player import Player
 
 logging.basicConfig(level=logging.DEBUG, filename="logs.txt", filemode="w", format="%(message)s")
 
 
-class User:
+class User(Player):
     def __init__(self):
-        self.ship_board = [["-" for _ in range(10)] for _ in range(10)]
-        self.shot_board = [["-" for _ in range(10)] for _ in range(10)]
+        super().__init__()
 
     def place_ships(self):
 

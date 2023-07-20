@@ -1,10 +1,9 @@
+from player import Player
 
-
-class Bot:
+class Bot(Player):
 
     def __init__(self):
-        self.ship_board = [["-" for _ in range(10)] for _ in range(10)]
-        self.shot_board = [["-" for _ in range(10)] for _ in range(10)]
+        super().__init__()
 
 
     def find_next_move(self, board):
@@ -25,7 +24,7 @@ class Bot:
             if board[row_pos][column_pos] == 'x':
                 match offset:
                     case (-1, 0):
-                        analyse_hit()
+                        self.analyse_hit()
                     case (0, -1):
                         pass
                     case (0, 1):
