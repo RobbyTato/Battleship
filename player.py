@@ -11,7 +11,7 @@ class Player:
         self.ship_board = [["-" for _ in range(10)] for _ in range(10)]
         self.shot_board = [["-" for _ in range(10)] for _ in range(10)]
 
-    def setup_ships(self):
+    def place_ships(self):
 
         def refresh_ship_pos():
             nonlocal ship_offset, ship_pos, extra, placeable
@@ -38,12 +38,12 @@ class Player:
                     placeable = False
                 elif not self.ship_board[x][y] == "-":
                     placeable = False
-                    extra.append([[x, y], Back.RED])
+                    extra.append([[x, y], Fore.RED + Back.RED])
                 else:
                     if outside:
-                        extra.append([[x, y], Back.RED])
+                        extra.append([[x, y], Fore.LIGHTRED_EX + Back.RED])
                     else:
-                        extra.append([[x, y], Back.LIGHTBLACK_EX])
+                        extra.append([[x, y], Fore.BLACK + Back.LIGHTBLACK_EX])
 
         ships = {"c": 5, "b": 4, "d": 3, "s": 3, "p": 2}
         ship_offset = []
@@ -97,32 +97,103 @@ class Player:
                 refresh_ship_pos()
                 self.display_ship_board(extra=extra)
 
+    def take_shot(self):
+        cursor = [0, 0]
+        while True:
+            extra = []
+            if self.shot_board[cursor[0]][cursor[1]] == "-":
+                extra.append([cursor, Fore.WHITE + Back.LIGHTBLACK_EX])
+            elif self.shot_board[cursor[0]][cursor[1]] == "O":
+                extra.append([cursor, Fore.BLACK + Back.LIGHTBLACK_EX])
+            else:
+                extra.append([cursor, Fore.BLACK + Back.RED])
+            self.display_shot_board(extra=extra)
+            key = keyboard.read_event()
+            if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
+                                                          "w", "s", "a", "d", "enter"):
+                continue
+            if key.name in ("up", "w"):
+                if cursor[0] != 0:
+                    cursor[0] -= 1
+                else:
+                    continue
+            if key.name in ("down", "s"):
+                if cursor[0] != 9:
+                    cursor[0] += 1
+                else:
+                    continue
+            if key.name in ("left", "a"):
+                if cursor[1] != 0:
+                    cursor[1] -= 1
+                else:
+                    continue
+            if key.name in ("right", "d"):
+                if cursor[1] != 9:
+                    cursor[1] += 1
+                else:
+                    continue
+            if key.name == "enter":
+                return cursor
+
     def ship_board_to_string(self, extra=None):
-        s = Fore.GREEN + "▟" + ("▄" * 40) + "▙\n" + Style.RESET_ALL  # first row
+        s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
         for x in range(10):  # add the board
-            line = Fore.GREEN + "▐" + Style.RESET_ALL
+            line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
             for y in range(10):
                 if extra is None:
                     if self.ship_board[x][y] == "-":
                         line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
                     else:
-                        line += Back.LIGHTBLACK_EX + "    " + Style.RESET_ALL
+                        line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
                 else:
                     for i in extra:
                         if i[0] == [x, y]:
-                            line += i[1] + "    " + Style.RESET_ALL
+                            line += i[1] + "▓▓▓▓" + Style.RESET_ALL
                             break
                     else:
                         if self.ship_board[x][y] == "-":
                             line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
                         else:
-                            line += Back.LIGHTBLACK_EX + "    " + Style.RESET_ALL
-            line += Fore.GREEN + "▌\n" + Style.RESET_ALL
+                            line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
+            line += Fore.LIGHTBLACK_EX + "█\n" + Style.RESET_ALL
             s += line * 2
-        s += Fore.GREEN + "▜" + ("▀" * 40) + "▛" + Style.RESET_ALL  # last row
+        s += Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL  # last row
+        return s
+
+    def shot_board_to_string(self, extra=None):
+        s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
+        for x in range(10):  # add the board
+            line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
+            for y in range(10):
+                if extra is None:
+                    if self.shot_board[x][y] == "-":
+                        line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
+                    elif self.shot_board[x][y] == "O":
+                        line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
+                    else:
+                        line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
+                else:
+                    for i in extra:
+                        if i[0] == [x, y]:
+                            line += i[1] + "▓▓▓▓" + Style.RESET_ALL
+                            break
+                    else:
+                        if self.shot_board[x][y] == "-":
+                            line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
+                        elif self.shot_board[x][y] == "O":
+                            line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
+                        else:
+                            line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
+            line += Fore.LIGHTBLACK_EX + "█\n" + Style.RESET_ALL
+            s += line * 2
+        s += Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL  # last row
         return s
 
     def display_ship_board(self, extra=None):
         ps.print_screen(self.ship_board_to_string(extra))
+
+    def display_shot_board(self, extra=None):
+        ps.print_screen(self.shot_board_to_string(extra))
+
 
 
