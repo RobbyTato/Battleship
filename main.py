@@ -2,7 +2,7 @@ import keyboard
 import print_screen as ps
 import colorama
 import logging
-from player import Player
+from user import User
 from bot import Bot
 from colorama import Fore, Back, Style
 
@@ -83,13 +83,21 @@ def game():
 
     # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
 
-    player = Player()
+    player = User()
     bot = Bot()
 
     player.place_ships()
 
 
 def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
+    """updates boards of both players after a shot has been fired
+
+    Args:
+        pos (tuple): tuple containing the y and x coordinates of the shot
+        player_shot_board (list): the shot_board of the player that fired the shot
+        enemy_ship_board (list): the ship board of the player that recieved the shot
+    """    
+
     enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
     player_shot_value = player_shot_board[pos[0]][pos[1]]
 
@@ -100,8 +108,42 @@ def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
         player_shot_value = 'O'
 
 
-def check_sunk(player_board, enemy_board):
-    pass
+def check_sunk(player):
+    """function that checks if a ship has been sunk and returns ship letter and coordinates of each part of the ship
+
+    Args:
+        player (Player): the player whose ship_board to check for sunk ships
+
+    Returns:
+        tuple: returns a tuple containing letter of ship sunk along with the coordinates of each part of the ship
+               e.g. ('p', ((0,1), (0,0)))
+    """    
+
+    ships_not_sunk = [i for i in ('c', 'd', 'b', 's', 'p') if i not in player.ships_sunk]
+
+    ship_coords = {'c':[], 'd':[], 'b':[], 's':[], 'p':[]}
+    
+    for ship in ships_not_sunk:
+
+        count = 0
+
+        for row_idx, row in enumerate(player.ship_board):
+
+            if ship not in row:
+
+                count += 1
+
+                for column_idx, board_value in enumerate(row):
+
+                    if len(board_value) == 2:
+                        ship_coords[board_value[0]].append((row_idx, column_idx))
+
+        if count == len(player.ship_board):
+            player.ships_sunk.append(ship)
+            return (ship, ship_coords[ship])
+        
+
+
 
 
 if __name__ == "__main__":
