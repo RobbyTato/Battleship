@@ -2,7 +2,7 @@ import keyboard
 import print_screen as ps
 import colorama
 import logging
-from player import Player
+from user import User
 from bot import Bot
 from colorama import Fore, Back, Style
 
@@ -83,7 +83,7 @@ def game():
 
     # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
 
-    player = Player()
+    player = User()
     bot = Bot()
 
     player.place_ships()
@@ -101,7 +101,8 @@ def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
 
 
 def check_sunk(player_board, enemy_board):
-    pass
+    
+    #for i in 
 
 
 if __name__ == "__main__":
