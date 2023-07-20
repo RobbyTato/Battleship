@@ -12,8 +12,17 @@ class User(Player):
         super().__init__()
 
     def place_ships(self):
+        """
+        Takes player input from keyboard to select the ships position.
+        :returns: None
+        """
 
         def refresh_ship_pos():
+            """
+            Refreshes the coordinates of the ship parts wrt the player's cursor
+            (Not to be used outside this function).
+            :return: None
+            """
             nonlocal ship_offset, ship_pos, extra, placeable
             placeable = True
             ship_offset = []
@@ -98,6 +107,10 @@ class User(Player):
                 self.display_ship_board(extra=extra)
 
     def take_shot(self):
+        """
+        Takes player input from keyboard to take a shot.
+        :returns: [x, y]
+        """
         cursor = [0, 0]
         while True:
             extra = []
@@ -136,6 +149,12 @@ class User(Player):
                 return cursor
 
     def ship_board_to_string(self, extra=None):
+        """
+        Converts self.ship_board into a multiline string.
+        :param extra: To add any extra details to the string that is not on the board (e.g. the cursor of the player)
+                      Format: [ [[x,y], color], ... ]
+        :return: string
+        """
         s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
         for x in range(10):  # add the board
             line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
@@ -161,6 +180,12 @@ class User(Player):
         return s
 
     def shot_board_to_string(self, extra=None):
+        """
+        Converts self.shot_board into a multiline string.
+        :param extra: To add any extra details to the string that is not on the board (e.g. the cursor of the player)
+                      Format: [ [[x,y], color], ... ]
+        :return: string
+        """
         s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
         for x in range(10):  # add the board
             line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
@@ -190,9 +215,21 @@ class User(Player):
         return s
 
     def display_ship_board(self, extra=None):
+        """
+        Prints self.ship_board to the screen.
+        :param extra: To add any extra details to the screen that is not on the board (e.g. the cursor of the player)
+                      Format: [ [[x,y], color], ... ]
+        :return: None
+        """
         ps.print_screen(self.ship_board_to_string(extra))
 
     def display_shot_board(self, extra=None):
+        """
+        Prints self.shot_board to the screen.
+        :param extra: To add any extra details to the screen that is not on the board (e.g. the cursor of the player)
+                      Format: [ [[x,y], color], ... ]
+        :return: None
+        """
         ps.print_screen(self.shot_board_to_string(extra))
 
 
