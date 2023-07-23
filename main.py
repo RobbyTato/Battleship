@@ -89,22 +89,7 @@ def game():
     player.place_ships()
 
 
-def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
-    """updates boards of both players after a shot has been fired
 
-    Args:
-        pos (tuple): tuple containing the y and x coordinates of the shot
-        player_shot_board (list): the shot_board of the player that fired the shot
-        enemy_ship_board (list): the ship board of the player that recieved the shot
-    """    
-
-    enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
-
-    if enemy_ship_value in ('c', 'd', 'b', 's', 'p'):
-        enemy_ship_board[pos[0]][pos[1]] = enemy_ship_value + '+'
-        player_shot_board[pos[0]][pos[1]] = 'X'
-    else:
-        player_shot_board[pos[0]][pos[1]] = 'O'
 
 
 def check_sunk(player):
@@ -118,7 +103,7 @@ def check_sunk(player):
                e.g. ('p', ((0,1), (0,0)))
     """    
 
-    ships_not_sunk = [i for i in ('c', 'd', 'b', 's', 'p') if i not in player.ships_sunk]
+    ships_not_sunk = [i for i in ('c', 'd', 'b', 's', 'p') if i not in player.sunk_ships]
 
     ship_coords = {'c':[], 'd':[], 'b':[], 's':[], 'p':[]}
     
@@ -138,7 +123,7 @@ def check_sunk(player):
                         ship_coords[board_value[0]].append((row_idx, column_idx))
 
         if count == len(player.ship_board):
-            player.ships_sunk.append(ship)
+            player.sunk_ships.append(ship)
             return (ship, ship_coords[ship])
         
 
