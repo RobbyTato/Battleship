@@ -1,4 +1,5 @@
 from player import Player
+from random import randint
 
 class Bot(Player):
 
@@ -6,32 +7,108 @@ class Bot(Player):
         super().__init__()
 
 
-    def find_next_move(self, board):
+    def find_next_shot(self, min_value=2):
+        """finds the next shot to take given the current shot board        
+
+        Args:
+            min_value (int, optional): used for recursion. Defaults to 2.
+
+        Returns:
+            tuple: two coordinates in the form (y, x)
+        """               
+
+        hits = []
+
+        for row_idx, row in enumerate(self.shot_board):
+            for column_idx, pos in enumerate(row):
+                if pos == 'X':
+                    hits.append((row_idx, column_idx))
         
-        for row_idx, row in enumerate(board):
-            for pos_idx, pos in enumerate(row):
-                if pos == 'x':
-                    next_move = self.analyse_hit(board, (row_idx, pos_idx))
+        if not hits:
+            while True:
 
+                x = randint(0, 9)
+                y = randint(0, 9)
 
+                if self.shot_board[y][x] not in ('O', 'X', '+'):
+                    return (y, x)
+            
+        if len(hits) == 1:
+            coords = hits[0]
+            if coords[1]-1 >= 0:
+                if self.shot_board[coords[0]][coords[1]-1] not in ('O', 'X', '+'):
+                    return (coords[0], coords[1]-1)
+            if coords[1]+1 < 10:
+                if self.shot_board[coords[0]][coords[1]+1] not in ('O', 'X', '+'):
+                    return (coords[0], coords[1]+1)
+            if coords[0]-1 >= 0:
+                if self.shot_board[coords[0]-1][coords[1]] not in ('O', 'X', '+'):
+                    return (coords[0]-1, coords[1])
+            if coords[0]+1 < 10:
+                if self.shot_board[coords[0]+1][coords[1]] not in ('O', 'X', '+'):
+                    return (coords[0]+1, coords[1])
 
-
-    def analyse_hit(self, board, pos):
+        rows = {}
+        cols = {}
         
-        for offset in ((-1, 0), (0, -1), (0, 1), (1, 0)):
-            row_pos = pos[0] + offset[0]
-            column_pos = pos[1] + offset[1]
-            if board[row_pos][column_pos] == 'x':
-                match offset:
-                    case (-1, 0):
-                        self.analyse_hit()
-                    case (0, -1):
-                        pass
-                    case (0, 1):
-                        pass
-                    case (1, 0):
-                        pass
+        for row, col in hits:
+            if row not in rows:
+                rows[row] = 1
+            else:
+                rows[row] += 1
+            if col not in cols:
+                cols[col] = 1
+            else:
+                cols[col] += 1
+            
+        for row in rows:
+
+            current_columns = []
+
+            if rows[row] >= min_value:
+                for y, x in hits:
+                    if y == row:
+                        current_columns.append(x)
+
+                if min(current_columns)-1 >= 0:
+                    if self.shot_board[row][min(current_columns)-1] not in ('O', '+'):
+                        return (row, min(current_columns)-1)
+                elif max(current_columns)+1 < 10:
+                    if self.shot_board[row][max(current_columns)+1] not in ('O', '+'):
+                        return (row, max(current_columns)+1)
+        
+        for column in cols:
+            current_row = []
+
+            if cols[column] >= min_value:
+                for y, x in hits:
+                    if x == column:
+                        current_row.append(y)
+
+                if min(current_row)-1 >= 0:
+                    if self.shot_board[min(current_row)-1][column] not in ('O', '+'):
+                        return (min(current_row)-1, column)
+                elif max(current_row)+1 < 10:
+                    if self.shot_board[max(current_row)+1][row] not in ('O', '+'):
+                        return (max(current_row)+1, column)
+        
+        return self.find_next_shot(min_value=1)
+        
                 
+if __name__ == '__main__':
 
+    bot = Bot()
+    bot.shot_board = [['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['O', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
+    
+    print(bot.find_next_shot())
 
 
