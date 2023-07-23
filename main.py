@@ -101,7 +101,7 @@ def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
     enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
 
     if enemy_ship_value in ('c', 'd', 'b', 's', 'p'):
-        enemy_ship_value = enemy_ship_value + '+'
+        enemy_ship_board[pos[0]][pos[1]] = enemy_ship_value + '+'
         player_shot_board[pos[0]][pos[1]] = 'X'
     else:
         player_shot_board[pos[0]][pos[1]] = 'O'
