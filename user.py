@@ -19,7 +19,7 @@ class User(Player):
 
         def refresh_ship_pos():
             """
-            Refreshes the coordinates of the ship parts wrt the player's cursor
+            Refreshes the coordinates of the ship parts with respect to the player's cursor
             (Not to be used outside this function).
             :return: None
             """
