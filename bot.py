@@ -6,6 +6,36 @@ class Bot(Player):
     def __init__(self):
         super().__init__()
 
+    def place_ships(self):
+
+        ships = {'c':5, 'b':4, 'd':3, 's':3, 'p':2}
+
+        for ship in ships:
+
+            while True:
+
+                ship_coordinates = []
+                count = 0
+
+                # coordinates of one end of the ship and rotation | r=0, vertical - r=1, horizontal
+                x, y, r = randint(0,9), randint(0,9), randint(0,1)
+
+                if r:
+                    for i in range(ships[ship]):
+                        ship_coordinates.append((y, x+i))
+                else:
+                    for i in range(ships[ship]):
+                        ship_coordinates.append((y+i, x))
+                
+                for y, x in ship_coordinates:
+                    if 0 <= x <= 9 and 0 <= y <= 9 and self.ship_board[y][x] == '-':
+                        count += 1
+
+                if count == ships[ship]:
+                    for y, x in ship_coordinates:
+                        self.ship_board[y][x] = ship
+                    break
+
 
     def find_next_shot(self, min_value=2):
         """finds the next shot to take given the current shot board        
@@ -27,8 +57,7 @@ class Bot(Player):
         if not hits:
             while True:
 
-                x = randint(0, 9)
-                y = randint(0, 9)
+                x, y = randint(0, 9), randint(0, 9)
 
                 if self.shot_board[y][x] not in ('O', 'X', '+'):
                     return (y, x)
@@ -98,6 +127,7 @@ class Bot(Player):
 if __name__ == '__main__':
 
     bot = Bot()
+    '''
     bot.shot_board = [['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
@@ -108,7 +138,10 @@ if __name__ == '__main__':
                       ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
-    
-    print(bot.find_next_shot())
+    '''
+    #print(bot.find_next_shot())
+    bot.place_ships()
+    for i in bot.ship_board:
+        print(i)
 
 
