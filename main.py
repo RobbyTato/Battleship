@@ -23,6 +23,30 @@ o888bood8P'  `Y888""8o   "888"   "888" o888o `Y8bod8P' 8""888P' o888o o888o o888
                                                                                   o888o
 '''
 
+player_1_wins = r'''
+ooooooooo.   oooo                                                  .o                         o8o                      
+`888   `Y88. `888                                                o888                         `"'                      
+ 888   .d88'  888   .oooo.   oooo    ooo  .ooooo.  oooo d8b       888       oooo oooo    ooo oooo  ooo. .oo.    .oooo.o
+ 888ooo88P'   888  `P  )88b   `88.  .8'  d88' `88b `888""8P       888        `88. `88.  .8'  `888  `888P"Y88b  d88(  "8
+ 888          888   .oP"888    `88..8'   888ooo888  888           888         `88..]88..8'    888   888   888  `"Y88b. 
+ 888          888  d8(  888     `888'    888    .o  888           888          `888'`888'     888   888   888  o.  )88b
+o888o        o888o `Y888""8o     .8'     `Y8bod8P' d888b         o888o          `8'  `8'     o888o o888o o888o 8""888P'
+                             .o..P'                                                                                    
+                             `Y8P'
+'''
+
+player_2_wins = r'''
+ooooooooo.   oooo                                                  .oooo.                          o8o                      
+`888   `Y88. `888                                                .dP""Y88b                         `"'                      
+ 888   .d88'  888   .oooo.   oooo    ooo  .ooooo.  oooo d8b            ]8P'      oooo oooo    ooo oooo  ooo. .oo.    .oooo.o
+ 888ooo88P'   888  `P  )88b   `88.  .8'  d88' `88b `888""8P          .d8P'        `88. `88.  .8'  `888  `888P"Y88b  d88(  "8
+ 888          888   .oP"888    `88..8'   888ooo888  888            .dP'            `88..]88..8'    888   888   888  `"Y88b. 
+ 888          888  d8(  888     `888'    888    .o  888          .oP     .o         `888'`888'     888   888   888  o.  )88b
+o888o        o888o `Y888""8o     .8'     `Y8bod8P' d888b         8888888888          `8'  `8'     o888o o888o o888o 8""888P'
+                             .o..P'                                                                                         
+                             `Y8P'                                                                                                                                                                                                   
+'''
+
 controls = '''
 ⠀ 🡅          W
 🡄   🡆  or  A   D to navigate
@@ -31,127 +55,165 @@ controls = '''
    Enter to select/confirm
 '''
 
+try:
+    def menu_screen():
+        menu_options = ["Play", "Controls", "Exit"]
+        option = 0
+        menu_text = ps.add_lines(
+            ["", "⮞  " + Back.WHITE + Fore.BLACK + "Play" + Style.RESET_ALL + "  ⮜", "", "Controls", "", "Exit"], title,
+            center=True)
+        ps.print_screen(menu_text)
 
-def menu_screen():
-    menu_options = ["Play", "Controls", "Exit"]
-    option = 0
-    menu_text = ps.add_lines(
-        ["", "⮞  " + Back.WHITE + Fore.BLACK + "Play" + Style.RESET_ALL + "  ⮜", "", "Controls", "", "Exit"], title,
-        center=True)
-    ps.print_screen(menu_text)
+        while True:
 
-    while True:
+            # process keyboard input
+            key = keyboard.read_event()
+            if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter"):
+                continue
+            if key.name in ("s", "down"):
+                if option == len(menu_options) - 1:
+                    option = 0
+                else:
+                    option += 1
+            if key.name in ("w", "up"):
+                if option == 0:
+                    option = len(menu_options) - 1
+                else:
+                    option -= 1
+            if key.name == "enter":
+                return menu_options[option]
 
-        # process keyboard input
-        key = keyboard.read_event()
-        if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter"):
-            continue
-        if key.name in ("s", "down"):
-            if option == len(menu_options) - 1:
-                option = 0
-            else:
-                option += 1
-        if key.name in ("w", "up"):
-            if option == 0:
-                option = len(menu_options) - 1
-            else:
-                option -= 1
-        if key.name == "enter":
-            return menu_options[option]
-
-        # reload menu
-        b = title
-        for i in range(len(menu_options)):
-            b = ps.add_line("", b)
-            if i == option:
-                b = ps.add_line("⮞  " + Back.WHITE + Fore.BLACK + menu_options[i] + Style.RESET_ALL + "  ⮜", b,
-                                center=True)
-            else:
-                b = ps.add_line(menu_options[i], b, center=True)
-        ps.print_screen(b)
-
-
-def game():
-    # 10 x 10 board grid
-
-    # Ship name     Ship size    Name on board (eg. "c")
-    # Carrier	    5            c
-    # Battleship    4            b
-    # Destroyer	    3            d
-    # Submarine	    3            s
-    # Patrol Boat   2            p
-
-    # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
-
-    player = User()
-    bot = Bot()
-
-    player.place_ships()
+            # reload menu
+            b = title
+            for i in range(len(menu_options)):
+                b = ps.add_line("", b)
+                if i == option:
+                    b = ps.add_line("⮞  " + Back.WHITE + Fore.BLACK + menu_options[i] + Style.RESET_ALL + "  ⮜", b,
+                                    center=True)
+                else:
+                    b = ps.add_line(menu_options[i], b, center=True)
+            ps.print_screen(b)
 
 
-def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
-    """updates boards of both players after a shot has been fired
+    def two_player_game():
 
-    Args:
-        pos (tuple): tuple containing the y and x coordinates of the shot
-        player_shot_board (list): the shot_board of the player that fired the shot
-        enemy_ship_board (list): the ship board of the player that recieved the shot
-    """    
-
-    enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
-
-    if enemy_ship_value in ('c', 'd', 'b', 's', 'p'):
-        enemy_ship_board[pos[0]][pos[1]] = enemy_ship_value + '+'
-        player_shot_board[pos[0]][pos[1]] = 'X'
-    else:
-        player_shot_board[pos[0]][pos[1]] = 'O'
-
-
-def check_sunk(player):
-    """function that checks if a ship has been sunk and returns ship letter and coordinates of each part of the ship
-
-    Args:
-        player (Player): the player whose ship_board to check for sunk ships
-
-    Returns:
-        tuple: returns a tuple containing letter of ship sunk along with the coordinates of each part of the ship
-               e.g. ('p', ((0,1), (0,0)))
-    """    
-
-    ships_not_sunk = [i for i in ('c', 'd', 'b', 's', 'p') if i not in player.ships_sunk]
-
-    ship_coords = {'c':[], 'd':[], 'b':[], 's':[], 'p':[]}
-    
-    for ship in ships_not_sunk:
-
-        count = 0
-
-        for row_idx, row in enumerate(player.ship_board):
-
-            if ship not in row:
-
-                count += 1
-
-                for column_idx, board_value in enumerate(row):
-
-                    if len(board_value) == 2:
-                        ship_coords[board_value[0]].append((row_idx, column_idx))
-
-        if count == len(player.ship_board):
-            player.ships_sunk.append(ship)
-            return (ship, ship_coords[ship])
-        
+        player1 = User()
+        player2 = User()
+        player1.place_ships()
+        player2.place_ships()
+        turn = "1"
+        while True:
+            if turn == "1":
+                shot = player1.take_shot()
+                update_boards_on_shot(shot, player1.shot_board, player2.ship_board)
+                check_sunk(player2)
+                turn = "2"
+            elif turn == "2":
+                shot = player2.take_shot()
+                update_boards_on_shot(shot, player2.shot_board, player1.ship_board)
+                check_sunk(player2)
+                turn = "1"
+            if set(player1.sunk_ships) == {"c", "b", "d", "s", "p"}:
+                ps.print_screen(player_1_wins)
+                keyboard.wait('enter')
+                break
+            elif set(player2.sunk_ships) == {"c", "b", "d", "s", "p"}:
+                ps.print_screen(player_2_wins)
+                keyboard.wait('enter')
+                break
 
 
 
 
-if __name__ == "__main__":
-    while True:
-        choice = menu_screen()
-        if choice == "Play":
-            game()
-        if choice == "Controls":
-            ps.print_screen(controls)
-            keyboard.wait('enter')
-        if choice == "Exit":
-            break
+
+
+
+
+    def game():
+        # 10 x 10 board grid
+
+        # Ship name     Ship size    Name on board (eg. "c")
+        # Carrier	    5            c
+        # Battleship    4            b
+        # Destroyer	    3            d
+        # Submarine	    3            s
+        # Patrol Boat   2            p
+
+        # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
+
+        player = User()
+        bot = Bot()
+
+        player.place_ships()
+
+
+    def update_boards_on_shot(pos, player_shot_board, enemy_ship_board):
+        """updates boards of both players after a shot has been fired
+
+        Args:
+            pos (tuple): tuple containing the y and x coordinates of the shot
+            player_shot_board (list): the shot_board of the player that fired the shot
+            enemy_ship_board (list): the ship board of the player that recieved the shot
+        """
+
+        enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
+
+        if enemy_ship_value in ('c', 'd', 'b', 's', 'p'):
+            enemy_ship_board[pos[0]][pos[1]] = enemy_ship_value + '+'
+            player_shot_board[pos[0]][pos[1]] = 'X'
+        else:
+            player_shot_board[pos[0]][pos[1]] = 'O'
+
+
+    def check_sunk(player):
+        """function that checks if a ship has been sunk and returns ship letter and coordinates of each part of the ship
+
+        Args:
+            player (Player): the player whose ship_board to check for sunk ships
+
+        Returns:
+            tuple: returns a tuple containing letter of ship sunk along with the coordinates of each part of the ship
+                   e.g. ('p', ((0,1), (0,0)))
+        """
+
+        ships_not_sunk = [i for i in ('c', 'd', 'b', 's', 'p') if i not in player.sunk_ships]
+
+        ship_coords = {'c': [], 'd': [], 'b': [], 's': [], 'p': []}
+
+        for ship in ships_not_sunk:
+
+            count = 0
+
+            for row_idx, row in enumerate(player.ship_board):
+
+                if ship not in row:
+
+                    count += 1
+
+                    for column_idx, board_value in enumerate(row):
+
+                        if len(board_value) == 2:
+                            ship_coords[board_value[0]].append((row_idx, column_idx))
+
+            if count == len(player.ship_board):
+                player.sunk_ships.append(ship)
+                return (ship, ship_coords[ship])
+
+
+    if __name__ == "__main__":
+        fullscreen_warning = "Make the terminal window fullscreen"
+        fullscreen_warning = ps.add_lines(['', 'Press enter to continue'], fullscreen_warning, center=True)
+        ps.print_screen(fullscreen_warning)
+        keyboard.wait('enter')
+        while True:
+            choice = menu_screen()
+            if choice == "Play":
+                two_player_game()
+            if choice == "Controls":
+                ps.print_screen(controls)
+                keyboard.wait('enter')
+            if choice == "Exit":
+                break
+
+except Exception as e:
+    logging.exception(e)
