@@ -1,5 +1,9 @@
 from colorama import Fore, Back, Style
 import print_screen as ps
+import logging
+
+logging.basicConfig(level=logging.DEBUG, filename="logs.txt", filemode="a", format="%(message)s")
+
 
 class Player:
 
@@ -15,7 +19,7 @@ class Player:
         Args:
             pos (tuple): tuple containing the y and x coordinates of the shot
             enemy_ship_board (list): the ship board of the player that recieved the shot
-        """    
+        """
 
         enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
 
@@ -25,14 +29,28 @@ class Player:
         else:
             self.shot_board[pos[0]][pos[1]] = 'O'
 
-    def ship_board_to_string(self, extra=None):
+    def ship_board_to_string(self, extra=None, top_text="", bottom_text=""):
         """
         Converts self.ship_board into a multiline string.
         :param extra: To add any extra details to the string that is not on the board (e.g. the cursor of the player)
                       Format: [ [[y,x], color], ... ]
+        :param top_text: Adds text to the top of the board (can be multiline)
+        :param bottom_text: Adds text to the bottom of the board (can be multiline)
         :return: string
         """
-        s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
+        lines_list = []
+        top_width = ps.get_docstring_width(top_text)
+        bottom_width = ps.get_docstring_width(bottom_text)
+        if top_width > bottom_width and top_width > 42:
+            longest_width = top_width
+        elif bottom_width > top_width and bottom_width > 42:
+            longest_width = bottom_width
+        else:
+            longest_width = 42
+        string = "⠀" * longest_width  # invisible unicode character only works here, not space
+        for i in top_text.split():
+            lines_list.append(i)
+        lines_list.append(Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄" + Style.RESET_ALL)  # first row
         for x in range(10):  # add the board
             line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
             for y in range(10):
@@ -51,19 +69,37 @@ class Player:
                             line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
                         else:
                             line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
-            line += Fore.LIGHTBLACK_EX + "█\n" + Style.RESET_ALL
-            s += line * 2
-        s += Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL  # last row
-        return s
+            line += Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
+            lines_list.append(line)
+            lines_list.append(line)
+        lines_list.append(Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL)  # last row
+        for j in bottom_text.split():
+            lines_list.append(j)
+        string = ps.add_lines(lines_list, string, center=True)
+        return string
 
-    def shot_board_to_string(self, extra=None):
+    def shot_board_to_string(self, extra=None, top_text="", bottom_text=""):
         """
         Converts self.shot_board into a multiline string.
         :param extra: To add any extra details to the string that is not on the board (e.g. the cursor of the player)
                       Format: [ [[y,x], color], ... ]
+        :param top_text: Adds text to the top of the board (can be multiline)
+        :param bottom_text: Adds text to the bottom of the board (can be multiline)
         :return: string
         """
-        s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
+        lines_list = []
+        top_width = ps.get_docstring_width(top_text)
+        bottom_width = ps.get_docstring_width(bottom_text)
+        if top_width > bottom_width and top_width > 42:
+            longest_width = top_width
+        elif bottom_width > top_width and bottom_width > 42:
+            longest_width = bottom_width
+        else:
+            longest_width = 42
+        string = "⠀" * longest_width  # invisible unicode character only works here, not space
+        for i in top_text.split():
+            lines_list.append(i)
+        lines_list.append(Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄" + Style.RESET_ALL)  # first row
         for x in range(10):  # add the board
             line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
             for y in range(10):
@@ -86,26 +122,33 @@ class Player:
                             line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
                         else:
                             line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
-            line += Fore.LIGHTBLACK_EX + "█\n" + Style.RESET_ALL
-            s += line * 2
-        s += Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL  # last row
-        return s
+            line += Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
+            lines_list.append(line)
+            lines_list.append(line)
+        lines_list.append(Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL)  # last row
+        for j in bottom_text.split():
+            lines_list.append(j)
+        string = ps.add_lines(lines_list, string, center=True)
+        return string
 
-    def display_ship_board(self, extra=None):
+    def display_ship_board(self, extra=None, top_text="", bottom_text=""):
         """
         Prints self.ship_board to the screen.
         :param extra: To add any extra details to the screen that is not on the board (e.g. the cursor of the player)
                       Format: [ [[y,x], color], ... ]
+        :param top_text: Adds text to the top of the board (can be multiline)
+        :param bottom_text: Adds text to the bottom of the board (can be multiline)
         :return: None
         """
-        ps.print_screen(self.ship_board_to_string(extra))
+        ps.print_screen(self.ship_board_to_string(extra, top_text, bottom_text))
 
-    def display_shot_board(self, extra=None):
+    def display_shot_board(self, extra=None, top_text="", bottom_text=""):
         """
         Prints self.shot_board to the screen.
         :param extra: To add any extra details to the screen that is not on the board (e.g. the cursor of the player)
                       Format: [ [[y,x], color], ... ]
+        :param top_text: Adds text to the top of the board (can be multiline)
+        :param bottom_text: Adds text to the bottom of the board (can be multiline)
         :return: None
         """
-        ps.print_screen(self.shot_board_to_string(extra))
-
+        ps.print_screen(self.shot_board_to_string(extra, top_text, bottom_text))
