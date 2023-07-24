@@ -2,6 +2,7 @@ import keyboard
 import print_screen as ps
 import colorama
 import logging
+from time import sleep
 from user import User
 from bot import Bot
 from colorama import Fore, Back, Style
@@ -23,7 +24,29 @@ o888bood8P'  `Y888""8o   "888"   "888" o888o `Y8bod8P' 8""888P' o888o o888o o888
                                                                                   o888o
 '''
 
-controls = '''
+player_wins = r'''
+ooooooooo.   oooo                                                                  o8o                      
+`888   `Y88. `888                                                                  `"'                      
+ 888   .d88'  888   .oooo.   oooo    ooo  .ooooo.  oooo d8b      oooo oooo    ooo oooo  ooo. .oo.    .oooo.o
+ 888ooo88P'   888  `P  )88b   `88.  .8'  d88' `88b `888""8P       `88. `88.  .8'  `888  `888P"Y88b  d88(  "8
+ 888          888   .oP"888    `88..8'   888ooo888  888            `88..]88..8'    888   888   888  `"Y88b. 
+ 888          888  d8(  888     `888'    888    .o  888             `888'`888'     888   888   888  o.  )88b
+o888o        o888o `Y888""8o     .8'     `Y8bod8P' d888b             `8'  `8'     o888o o888o o888o 8""888P'
+                             .o..P'                                                                                    
+                             `Y8P'
+'''
+
+bot_wins = r'''
+oooooooooo.                .                          o8o                       
+`888'   `Y8b             .o8                          `"'                       
+ 888     888  .ooooo.  .o888oo      oooo oooo    ooo oooo  ooo. .oo.    .oooo.o 
+ 888oooo888' d88' `88b   888         `88. `88.  .8'  `888  `888P"Y88b  d88(  "8 
+ 888    `88b 888   888   888          `88..]88..8'    888   888   888  `"Y88b.  
+ 888    .88P 888   888   888 .         `888'`888'     888   888   888  o.  )88b 
+o888bood8P'  `Y8bod8P'   "888"          `8'  `8'     o888o o888o o888o 8""888P' 
+'''
+
+controls = r'''
 ⠀ 🡅          W
 🡄   🡆  or  A   D to navigate
   🡇          S
@@ -71,27 +94,6 @@ def menu_screen():
         ps.print_screen(b)
 
 
-def game():
-    # 10 x 10 board grid
-
-    # Ship name     Ship size    Name on board (eg. "c")
-    # Carrier	    5            c
-    # Battleship    4            b
-    # Destroyer	    3            d
-    # Submarine	    3            s
-    # Patrol Boat   2            p
-
-    # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
-
-    player = User()
-    bot = Bot()
-
-    player.place_ships()
-
-
-
-
-
 def check_sunk(player):
     """function that checks if a ship has been sunk and returns ship letter and coordinates of each part of the ship
 
@@ -126,6 +128,48 @@ def check_sunk(player):
             player.sunk_ships.append(ship)
             return (ship, ship_coords[ship])
         
+
+def game():
+    # 10 x 10 board grid
+
+    # Ship name     Ship size    Name on board (eg. "c")
+    # Carrier	    5            c
+    # Battleship    4            b
+    # Destroyer	    3            d
+    # Submarine	    3            s
+    # Patrol Boat   2            p
+
+    # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
+
+    player = User()
+    bot = Bot()
+
+    player.place_ships()
+    bot.place_ships()
+
+    is_player_turn = True
+    while True:
+        if is_player_turn:
+            shot = player.take_shot()[::-1]
+            player.update_boards_on_shot(shot, bot.ship_board)
+            check_sunk(bot)
+            is_player_turn = False
+        else:
+            shot = bot.find_next_shot()
+            bot.update_boards_on_shot(shot, player.ship_board)
+            bot.display_shot_board()
+            sleep(2)
+            check_sunk(player)
+
+            is_player_turn = True
+        if set(player.sunk_ships) == {"c", "b", "d", "s", "p"}:
+            ps.print_screen(bot_wins)
+            keyboard.wait('enter')
+            break
+        elif set(bot.sunk_ships) == {"c", "b", "d", "s", "p"}:
+            ps.print_screen(player_wins)
+            keyboard.wait('enter')
+            break
 
 
 
