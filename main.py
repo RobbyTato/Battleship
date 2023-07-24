@@ -141,6 +141,12 @@ def game():
 
     # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
 
+    ships = {"c": ["Carrier", 5],
+             "b": ["Battleship", 4],
+             "d": ["Destroyer", 3],
+             "s": ["Submarine", 3],
+             "p": ["Patrol board", 2]}
+
     player = User()
     bot = Bot()
 
@@ -151,16 +157,31 @@ def game():
     while True:
         if is_player_turn:
             shot = player.take_shot()[::-1]
-            player.update_boards_on_shot(shot, bot.ship_board)
-            check_sunk(bot)
+            result = player.update_boards_on_shot(shot, bot.ship_board)
+            sunk = check_sunk(bot)
+            top_text = "Player's turn to take a shot"
+            if result == "O":
+                bottom_text = "Miss!"
+            elif result == "X" and not sunk:
+                bottom_text = "Hit!"
+            else:
+                bottom_text = f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1"
+            player.display_shot_board(top_text=top_text, bottom_text=bottom_text)
+            sleep(2)
             is_player_turn = False
         else:
             shot = bot.find_next_shot()
-            bot.update_boards_on_shot(shot, player.ship_board)
-            bot.display_shot_board()
+            result = bot.update_boards_on_shot(shot, player.ship_board)
+            sunk = check_sunk(player)
+            top_text = "Bot's turn to take a shot"
+            if result == "O":
+                bottom_text = "Miss!"
+            elif result == "X" and not sunk:
+                bottom_text = "Hit!"
+            else:
+                bottom_text = f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1"
+            bot.display_shot_board(top_text=top_text, bottom_text=bottom_text)
             sleep(2)
-            check_sunk(player)
-
             is_player_turn = True
         if set(player.sunk_ships) == {"c", "b", "d", "s", "p"}:
             ps.print_screen(bot_wins)
@@ -170,8 +191,6 @@ def game():
             ps.print_screen(player_wins)
             keyboard.wait('enter')
             break
-
-
 
 
 if __name__ == "__main__":
