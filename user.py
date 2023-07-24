@@ -68,7 +68,7 @@ class User(Player):
             while True:
                 key = keyboard.read_event()
                 if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
-                                                              "w", "s", "a", "d", "enter", "r"):
+                                                              "w", "s", "a", "d", "enter", "space", "r"):
                     continue
                 if key.name in ("up", "w"):
                     if cursor[1] != 0:
@@ -95,7 +95,7 @@ class User(Player):
                         current_rotation += 1
                     else:
                         current_rotation = 0
-                if key.name == "enter":
+                if key.name in ("enter", "space"):
                     if placeable:
                         for i in ship_pos:
                             self.ship_board[i[0]][i[1]] = ship
@@ -112,18 +112,18 @@ class User(Player):
         :returns: [y, x]
         """
         cursor = [0, 0]
+        extra = []
+        if self.shot_board[cursor[0]][cursor[1]] == "-":
+            extra.append([cursor, Fore.WHITE + Back.LIGHTBLACK_EX])
+        elif self.shot_board[cursor[0]][cursor[1]] == "O":
+            extra.append([cursor, Fore.BLACK + Back.LIGHTBLACK_EX])
+        else:
+            extra.append([cursor, Fore.BLACK + Back.RED])
+        self.display_shot_board(extra=extra)
         while True:
-            extra = []
-            if self.shot_board[cursor[0]][cursor[1]] == "-":
-                extra.append([cursor, Fore.WHITE + Back.LIGHTBLACK_EX])
-            elif self.shot_board[cursor[0]][cursor[1]] == "O":
-                extra.append([cursor, Fore.BLACK + Back.LIGHTBLACK_EX])
-            else:
-                extra.append([cursor, Fore.BLACK + Back.RED])
-            self.display_shot_board(extra=extra)
             key = keyboard.read_event()
             if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
-                                                          "w", "s", "a", "d", "enter"):
+                                                          "w", "s", "a", "d", "enter", "space"):
                 continue
             if key.name in ("up", "w"):
                 if cursor[1] != 0:
@@ -145,8 +145,20 @@ class User(Player):
                     cursor[0] += 1
                 else:
                     continue
-            if key.name == "enter":
-                return cursor[::-1]
+            if key.name in ("space", "enter"):
+                if self.shot_board[cursor[0]][cursor[1]] == "-":
+                    return cursor[::-1]
+                else:
+                    continue
+            extra = []
+            if self.shot_board[cursor[0]][cursor[1]] == "-":
+                extra.append([cursor, Fore.WHITE + Back.LIGHTBLACK_EX])
+            elif self.shot_board[cursor[0]][cursor[1]] == "O":
+                extra.append([cursor, Fore.BLACK + Back.LIGHTBLACK_EX])
+            else:
+                extra.append([cursor, Fore.BLACK + Back.RED])
+            self.display_shot_board(extra=extra)
+
 
 
 
