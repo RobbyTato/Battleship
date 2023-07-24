@@ -14,7 +14,7 @@ class User(Player):
     def place_ships(self):
         """
         Takes player input from keyboard to select the ships position.
-        :returns: None
+        :return: None
         """
 
         def refresh_ship_pos():
@@ -26,9 +26,9 @@ class User(Player):
             nonlocal ship_offset, ship_pos, extra, placeable
             placeable = True
             ship_offset = []
-            for i in range(ships[ship]):
-                x_offset = (i - (ships[ship] // 2)) * rotations[current_rotation][0]
-                y_offset = (i - (ships[ship] // 2)) * rotations[current_rotation][1]
+            for i in range(ships[ship][1]):
+                x_offset = (i - (ships[ship][1] // 2)) * rotations[current_rotation][0]
+                y_offset = (i - (ships[ship][1] // 2)) * rotations[current_rotation][1]
                 ship_offset.append([x_offset, y_offset])
             ship_pos = []
             for i in ship_offset:
@@ -54,7 +54,11 @@ class User(Player):
                     else:
                         extra.append([[x, y], Fore.BLACK + Back.LIGHTBLACK_EX])
 
-        ships = {"c": 5, "b": 4, "d": 3, "s": 3, "p": 2}
+        ships = {"c": ["Carrier", 5],
+                 "b": ["Battleship", 4],
+                 "d": ["Destroyer", 3],
+                 "s": ["Submarine", 3],
+                 "p": ["Patrol board", 2]}
         ship_offset = []
         ship_pos = []
         extra = []
@@ -64,7 +68,9 @@ class User(Player):
         for ship in ships:
             cursor = [0, 0]
             refresh_ship_pos()
-            self.display_ship_board(extra=extra)
+            top_text = "Player's turn to place ships"
+            bottom_text = f"Placing {ships[ship][0]} {ships[ship][1]}x1"
+            self.display_ship_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
             while True:
                 key = keyboard.read_event()
                 if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
@@ -104,22 +110,28 @@ class User(Player):
                         continue
 
                 refresh_ship_pos()
-                self.display_ship_board(extra=extra)
+                top_text = "Player's turn to place ships"
+                bottom_text = f"Placing {ships[ship][0]} {ships[ship][1]}x1"
+                self.display_ship_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
 
     def take_shot(self):
         """
         Takes player input from keyboard to take a shot.
-        :returns: [y, x]
+        :return: [y, x]
         """
         cursor = [0, 0]
         extra = []
         if self.shot_board[cursor[0]][cursor[1]] == "-":
             extra.append([cursor, Fore.WHITE + Back.LIGHTBLACK_EX])
+            bottom_text = "⠀"  # invisible unicode character only works here, not space
         elif self.shot_board[cursor[0]][cursor[1]] == "O":
             extra.append([cursor, Fore.BLACK + Back.LIGHTBLACK_EX])
+            bottom_text = "Cannot take shot here"
         else:
             extra.append([cursor, Fore.BLACK + Back.RED])
-        self.display_shot_board(extra=extra)
+            bottom_text = "Cannot take shot here"
+        top_text = "Player's turn to take a shot"
+        self.display_shot_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
         while True:
             key = keyboard.read_event()
             if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
@@ -153,11 +165,15 @@ class User(Player):
             extra = []
             if self.shot_board[cursor[0]][cursor[1]] == "-":
                 extra.append([cursor, Fore.WHITE + Back.LIGHTBLACK_EX])
+                bottom_text = "⠀"  # invisible unicode character only works here, not space
             elif self.shot_board[cursor[0]][cursor[1]] == "O":
                 extra.append([cursor, Fore.BLACK + Back.LIGHTBLACK_EX])
+                bottom_text = "Cannot take shot here"
             else:
                 extra.append([cursor, Fore.BLACK + Back.RED])
-            self.display_shot_board(extra=extra)
+                bottom_text = "Cannot take shot here"
+            top_text = "Player's turn to take a shot"
+            self.display_shot_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
 
 
 
