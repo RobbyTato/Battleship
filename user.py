@@ -1,13 +1,13 @@
 import logging
 import keyboard
-from colorama import Fore, Back, Style
-import print_screen as ps
+from colorama import Fore, Back
 from player import Player
 
 logging.basicConfig(level=logging.DEBUG, filename="logs.txt", filemode="w", format="%(message)s")
 
 
 class User(Player):
+    
     def __init__(self):
         super().__init__()
 
@@ -71,23 +71,23 @@ class User(Player):
                                                               "w", "s", "a", "d", "enter", "r"):
                     continue
                 if key.name in ("up", "w"):
-                    if cursor[0] != 0:
-                        cursor[0] -= 1
-                    else:
-                        continue
-                if key.name in ("down", "s"):
-                    if cursor[0] != 9:
-                        cursor[0] += 1
-                    else:
-                        continue
-                if key.name in ("left", "a"):
                     if cursor[1] != 0:
                         cursor[1] -= 1
                     else:
                         continue
-                if key.name in ("right", "d"):
+                if key.name in ("down", "s"):
                     if cursor[1] != 9:
                         cursor[1] += 1
+                    else:
+                        continue
+                if key.name in ("left", "a"):
+                    if cursor[0] != 0:
+                        cursor[0] -= 1
+                    else:
+                        continue
+                if key.name in ("right", "d"):
+                    if cursor[0] != 9:
+                        cursor[0] += 1
                     else:
                         continue
                 if key.name == "r":
@@ -109,7 +109,7 @@ class User(Player):
     def take_shot(self):
         """
         Takes player input from keyboard to take a shot.
-        :returns: [x, y]
+        :returns: [y, x]
         """
         cursor = [0, 0]
         while True:
@@ -126,111 +126,27 @@ class User(Player):
                                                           "w", "s", "a", "d", "enter"):
                 continue
             if key.name in ("up", "w"):
-                if cursor[0] != 0:
-                    cursor[0] -= 1
-                else:
-                    continue
-            if key.name in ("down", "s"):
-                if cursor[0] != 9:
-                    cursor[0] += 1
-                else:
-                    continue
-            if key.name in ("left", "a"):
                 if cursor[1] != 0:
                     cursor[1] -= 1
                 else:
                     continue
-            if key.name in ("right", "d"):
+            if key.name in ("down", "s"):
                 if cursor[1] != 9:
                     cursor[1] += 1
                 else:
                     continue
+            if key.name in ("left", "a"):
+                if cursor[0] != 0:
+                    cursor[0] -= 1
+                else:
+                    continue
+            if key.name in ("right", "d"):
+                if cursor[0] != 9:
+                    cursor[0] += 1
+                else:
+                    continue
             if key.name == "enter":
                 return cursor
-
-    def ship_board_to_string(self, extra=None):
-        """
-        Converts self.ship_board into a multiline string.
-        :param extra: To add any extra details to the string that is not on the board (e.g. the cursor of the player)
-                      Format: [ [[x,y], color], ... ]
-        :return: string
-        """
-        s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
-        for x in range(10):  # add the board
-            line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
-            for y in range(10):
-                if extra is None:
-                    if self.ship_board[x][y] == "-":
-                        line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
-                    else:
-                        line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
-                else:
-                    for i in extra:
-                        if i[0] == [x, y]:
-                            line += i[1] + "▓▓▓▓" + Style.RESET_ALL
-                            break
-                    else:
-                        if self.ship_board[x][y] == "-":
-                            line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
-                        else:
-                            line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
-            line += Fore.LIGHTBLACK_EX + "█\n" + Style.RESET_ALL
-            s += line * 2
-        s += Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL  # last row
-        return s
-
-    def shot_board_to_string(self, extra=None):
-        """
-        Converts self.shot_board into a multiline string.
-        :param extra: To add any extra details to the string that is not on the board (e.g. the cursor of the player)
-                      Format: [ [[x,y], color], ... ]
-        :return: string
-        """
-        s = Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄\n" + Style.RESET_ALL  # first row
-        for x in range(10):  # add the board
-            line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
-            for y in range(10):
-                if extra is None:
-                    if self.shot_board[x][y] == "-":
-                        line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
-                    elif self.shot_board[x][y] == "O":
-                        line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
-                    else:
-                        line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
-                else:
-                    for i in extra:
-                        if i[0] == [x, y]:
-                            line += i[1] + "▓▓▓▓" + Style.RESET_ALL
-                            break
-                    else:
-                        if self.shot_board[x][y] == "-":
-                            line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
-                        elif self.shot_board[x][y] == "O":
-                            line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
-                        else:
-                            line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
-            line += Fore.LIGHTBLACK_EX + "█\n" + Style.RESET_ALL
-            s += line * 2
-        s += Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL  # last row
-        return s
-
-    def display_ship_board(self, extra=None):
-        """
-        Prints self.ship_board to the screen.
-        :param extra: To add any extra details to the screen that is not on the board (e.g. the cursor of the player)
-                      Format: [ [[x,y], color], ... ]
-        :return: None
-        """
-        ps.print_screen(self.ship_board_to_string(extra))
-
-    def display_shot_board(self, extra=None):
-        """
-        Prints self.shot_board to the screen.
-        :param extra: To add any extra details to the screen that is not on the board (e.g. the cursor of the player)
-                      Format: [ [[x,y], color], ... ]
-        :return: None
-        """
-        ps.print_screen(self.shot_board_to_string(extra))
 
 
 
