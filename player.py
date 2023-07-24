@@ -48,7 +48,7 @@ class Player:
         else:
             longest_width = 42
         string = "⠀" * longest_width  # invisible unicode character only works here, not space
-        for i in top_text.split():
+        for i in top_text.split("\n"):
             lines_list.append(i)
         lines_list.append(Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄" + Style.RESET_ALL)  # first row
         for x in range(10):  # add the board
@@ -73,7 +73,7 @@ class Player:
             lines_list.append(line)
             lines_list.append(line)
         lines_list.append(Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL)  # last row
-        for j in bottom_text.split():
+        for j in bottom_text.split("\n"):
             lines_list.append(j)
         string = ps.add_lines(lines_list, string, center=True)
         return string
@@ -97,7 +97,7 @@ class Player:
         else:
             longest_width = 42
         string = "⠀" * longest_width  # invisible unicode character only works here, not space
-        for i in top_text.split():
+        for i in top_text.split("\n"):
             lines_list.append(i)
         lines_list.append(Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄" + Style.RESET_ALL)  # first row
         for x in range(10):  # add the board
@@ -126,7 +126,7 @@ class Player:
             lines_list.append(line)
             lines_list.append(line)
         lines_list.append(Fore.LIGHTBLACK_EX + "▀" + ("▀" * 40) + "▀" + Style.RESET_ALL)  # last row
-        for j in bottom_text.split():
+        for j in bottom_text.split("\n"):
             lines_list.append(j)
         string = ps.add_lines(lines_list, string, center=True)
         return string
