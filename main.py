@@ -2,6 +2,7 @@ import keyboard
 import print_screen as ps
 import colorama
 import logging
+from playsound import playsound
 from time import sleep
 from user import User
 from bot import Bot
@@ -32,18 +33,18 @@ ooooooooo.   oooo                                                               
  888          888   .oP"888    `88..8'   888ooo888  888            `88..]88..8'    888   888   888  `"Y88b. 
  888          888  d8(  888     `888'    888    .o  888             `888'`888'     888   888   888  o.  )88b
 o888o        o888o `Y888""8o     .8'     `Y8bod8P' d888b             `8'  `8'     o888o o888o o888o 8""888P'
-                             .o..P'                                                                                    
+                             .o..P'                                                                         
                              `Y8P'
 '''
 
 bot_wins = r'''
-oooooooooo.                .                          o8o                       
-`888'   `Y8b             .o8                          `"'                       
- 888     888  .ooooo.  .o888oo      oooo oooo    ooo oooo  ooo. .oo.    .oooo.o 
- 888oooo888' d88' `88b   888         `88. `88.  .8'  `888  `888P"Y88b  d88(  "8 
- 888    `88b 888   888   888          `88..]88..8'    888   888   888  `"Y88b.  
- 888    .88P 888   888   888 .         `888'`888'     888   888   888  o.  )88b 
-o888bood8P'  `Y8bod8P'   "888"          `8'  `8'     o888o o888o o888o 8""888P' 
+oooooooooo.                .                          o8o                      
+`888'   `Y8b             .o8                          `"'                      
+ 888     888  .ooooo.  .o888oo      oooo oooo    ooo oooo  ooo. .oo.    .oooo.o
+ 888oooo888' d88' `88b   888         `88. `88.  .8'  `888  `888P"Y88b  d88(  "8
+ 888    `88b 888   888   888          `88..]88..8'    888   888   888  `"Y88b. 
+ 888    .88P 888   888   888 .         `888'`888'     888   888   888  o.  )88b
+o888bood8P'  `Y8bod8P'   "888"          `8'  `8'     o888o o888o o888o 8""888P'
 '''
 
 controls = f'''
@@ -86,6 +87,7 @@ def menu_screen():
         key = keyboard.read_event()
         if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter", "space"):
             continue
+        playsound('sounds/move.mp3', False)
         if key.name in ("s", "down"):
             if option == len(menu_options) - 1:
                 option = 0
@@ -111,7 +113,7 @@ def menu_screen():
         ps.print_screen(b)
 
 
-def check_sunk(player):
+def check_sunk(player, enemy):
     """function that checks if a ship has been sunk and returns ship letter and coordinates of each part of the ship
 
     Args:
@@ -144,7 +146,7 @@ def check_sunk(player):
         if count == len(player.ship_board):
             player.sunk_ships.append(ship)
             for y, x in ship_coords[ship]:
-                player.shot_board[y][x] = '+'
+                enemy.shot_board[y][x] = '+'
             return (ship, ship_coords[ship])
         
 
@@ -177,29 +179,35 @@ def game():
         if is_player_turn:
             shot = player.take_shot()[::-1]
             result = player.update_boards_on_shot(shot, bot.ship_board)
-            sunk = check_sunk(bot)
+            sunk = check_sunk(bot, player)
             top_text = "Player's turn to take a shot"
             if result == "O":
-                bottom_text = "Miss!"
+                player.display_shot_board(top_text=top_text, bottom_text="Miss!")
+                playsound('sounds/miss.mp3', False)
             elif result == "X" and not sunk:
-                bottom_text = "Hit!"
+                player.display_shot_board(top_text=top_text, bottom_text="Hit!")
+                playsound('sounds/hit.mp3', False)
             else:
-                bottom_text = f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1"
-            player.display_shot_board(top_text=top_text, bottom_text=bottom_text)
+                player.display_shot_board(top_text=top_text,
+                                          bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
+                playsound('sounds/hit.mp3', False)
             sleep(2)
             is_player_turn = False
         else:
             shot = bot.find_next_shot()
             result = bot.update_boards_on_shot(shot, player.ship_board)
-            sunk = check_sunk(player)
+            sunk = check_sunk(player, bot)
             top_text = "Bot's turn to take a shot"
             if result == "O":
-                bottom_text = "Miss!"
+                bot.display_shot_board(top_text=top_text, bottom_text="Miss!")
+                playsound('sounds/miss.mp3', False)
             elif result == "X" and not sunk:
-                bottom_text = "Hit!"
+                bot.display_shot_board(top_text=top_text, bottom_text="Hit!")
+                playsound('sounds/hit.mp3', False)
             else:
-                bottom_text = f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1"
-            bot.display_shot_board(top_text=top_text, bottom_text=bottom_text)
+                bot.display_shot_board(top_text=top_text,
+                                       bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
+                playsound('sounds/hit.mp3', False)
             sleep(2)
             is_player_turn = True
         if set(player.sunk_ships) == {"c", "b", "d", "s", "p"}:

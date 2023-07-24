@@ -1,5 +1,6 @@
 import logging
 import keyboard
+from playsound import playsound
 from colorama import Fore, Back
 from player import Player
 
@@ -76,6 +77,7 @@ class User(Player):
                 if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
                                                               "w", "s", "a", "d", "enter", "space", "r"):
                     continue
+                playsound('sounds/move.mp3', False)
                 if key.name in ("up", "w"):
                     if cursor[1] != 0:
                         cursor[1] -= 1
@@ -137,6 +139,7 @@ class User(Player):
             if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
                                                           "w", "s", "a", "d", "enter", "space"):
                 continue
+            playsound('sounds/move.mp3', False)
             if key.name in ("up", "w"):
                 if cursor[1] != 0:
                     cursor[1] -= 1
