@@ -46,20 +46,37 @@ oooooooooo.                .                          o8o
 o888bood8P'  `Y8bod8P'   "888"          `8'  `8'     o888o o888o o888o 8""888P' 
 '''
 
-controls = r'''
-⠀ 🡅          W
-🡄   🡆  or  A   D to navigate
-  🡇          S
-   
-   Enter to select/confirm
+controls = f'''
+⠀          {Fore.BLACK + Back.WHITE + Style.DIM}Controls{Style.RESET_ALL}
+
+
+Arrow keys or WASD to navigate
+
+   Enter or space to select
+
+       R to rotate ship
+'''
+
+
+creators = f'''
+⠀                                   {Fore.BLACK + Back.WHITE + Style.DIM}Creators{Style.RESET_ALL}
+
+
+         Created by Ebil Jacob (RobbyTato) and Ravin Kumar (Ravin-Kumar)
+as a final project for the Summer EDGE program in Carnegie Mellon University Qatar
+
+      Project files are available at https://github.com/RobbyTato/Battleship
 '''
 
 
 def menu_screen():
-    menu_options = ["Play", "Controls", "Exit"]
+    menu_options = ["Play", "Controls", "Creators", "Exit"]
     option = 0
     menu_text = ps.add_lines(
-        ["", "⮞  " + Back.WHITE + Fore.BLACK + "Play" + Style.RESET_ALL + "  ⮜", "", "Controls", "", "Exit"], title,
+        ["", "⮞  " + Back.WHITE + Fore.BLACK + "Play" + Style.RESET_ALL + "  ⮜",
+         "", "Controls",
+         "", "Creators",
+         "", "Exit"], title,
         center=True)
     ps.print_screen(menu_text)
 
@@ -67,7 +84,7 @@ def menu_screen():
 
         # process keyboard input
         key = keyboard.read_event()
-        if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter"):
+        if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter", "space"):
             continue
         if key.name in ("s", "down"):
             if option == len(menu_options) - 1:
@@ -79,7 +96,7 @@ def menu_screen():
                 option = len(menu_options) - 1
             else:
                 option -= 1
-        if key.name == "enter":
+        if key.name in ("enter", "space"):
             return menu_options[option]
 
         # reload menu
@@ -202,6 +219,9 @@ if __name__ == "__main__":
             game()
         if choice == "Controls":
             ps.print_screen(controls)
+            keyboard.wait('enter')
+        if choice == "Creators":
+            ps.print_screen(creators)
             keyboard.wait('enter')
         if choice == "Exit":
             break
