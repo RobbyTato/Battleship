@@ -19,6 +19,9 @@ class Player:
         Args:
             pos (tuple): tuple containing the y and x coordinates of the shot
             enemy_ship_board (list): the ship board of the player that recieved the shot
+
+        Returns:
+            result (str): 'X' if hit, 'O' if miss
         """
 
         enemy_ship_value = enemy_ship_board[pos[0]][pos[1]]
@@ -26,8 +29,10 @@ class Player:
         if enemy_ship_value in ('c', 'd', 'b', 's', 'p'):
             enemy_ship_board[pos[0]][pos[1]] = enemy_ship_value + '+'
             self.shot_board[pos[0]][pos[1]] = 'X'
+            return 'X'
         else:
             self.shot_board[pos[0]][pos[1]] = 'O'
+            return 'O'
 
     def ship_board_to_string(self, extra=None, top_text="", bottom_text=""):
         """
