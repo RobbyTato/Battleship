@@ -146,7 +146,7 @@ class User(Player):
                 else:
                     continue
             if key.name == "enter":
-                return cursor
+                return cursor[::-1]
 
 
 
