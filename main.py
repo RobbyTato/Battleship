@@ -126,6 +126,8 @@ def check_sunk(player):
 
         if count == len(player.ship_board):
             player.sunk_ships.append(ship)
+            for y, x in ship_coords[ship]:
+                player.shot_board[y][x] = '+'
             return (ship, ship_coords[ship])
         
 
