@@ -46,109 +46,104 @@ class Bot(Player):
         Returns:
             tuple: two coordinates in the form (y, x)
         """
-        try:
-            hits = []
+        
+        hits = []
 
-            for row_idx, row in enumerate(self.shot_board):
-                for column_idx, pos in enumerate(row):
-                    if pos == 'X':
-                        hits.append((row_idx, column_idx))
+        for row_idx, row in enumerate(self.shot_board):
+            for column_idx, pos in enumerate(row):
+                if pos == 'X':
+                    hits.append((row_idx, column_idx))
 
-            if not hits:
-                while True:
-
-                    x, y = randint(0, 9), randint(0, 9)
-
-                    if self.shot_board[y][x] not in ('O', 'X', '+'):
-                        return (y, x)
-
-            if len(hits) == 1:
-                coords = hits[0]
-                if coords[1]-1 >= 0:
-                    if self.shot_board[coords[0]][coords[1]-1] not in ('O', 'X', '+'):
-                        return (coords[0], coords[1]-1)
-                if coords[1]+1 < 10:
-                    if self.shot_board[coords[0]][coords[1]+1] not in ('O', 'X', '+'):
-                        return (coords[0], coords[1]+1)
-                if coords[0]-1 >= 0:
-                    if self.shot_board[coords[0]-1][coords[1]] not in ('O', 'X', '+'):
-                        return (coords[0]-1, coords[1])
-                if coords[0]+1 < 10:
-                    if self.shot_board[coords[0]+1][coords[1]] not in ('O', 'X', '+'):
-                        return (coords[0]+1, coords[1])
-
-            rows = {}
-            cols = {}
-
-            for row, col in hits:
-                if row not in rows:
-                    rows[row] = 1
-                else:
-                    rows[row] += 1
-                if col not in cols:
-                    cols[col] = 1
-                else:
-                    cols[col] += 1
-
-            for row in rows:
-
-                current_columns = []
-
-                if rows[row] >= min_value:
-                    for y, x in hits:
-                        if y == row:
-                            current_columns.append(x)
-
-                    if min(current_columns)-1 >= 0:
-                        if self.shot_board[row][min(current_columns)-1] not in ('O', '+'):
-                            return (row, min(current_columns)-1)
-                    elif max(current_columns)+1 < 10:
-                        if self.shot_board[row][max(current_columns)+1] not in ('O', '+'):
-                            return (row, max(current_columns)+1)
-
-            for column in cols:
-                current_row = []
-
-                if cols[column] >= min_value:
-                    for y, x in hits:
-                        if x == column:
-                            current_row.append(y)
-
-                    if min(current_row)-1 >= 0:
-                        if self.shot_board[min(current_row)-1][column] not in ('O', '+'):
-                            return (min(current_row)-1, column)
-                    elif max(current_row)+1 < 10:
-                        if self.shot_board[max(current_row)+1][row] not in ('O', '+'):
-                            return (max(current_row)+1, column)
-
-            return self.find_next_shot(min_value=1)
-        except RecursionError:
+        if not hits:
             while True:
 
                 x, y = randint(0, 9), randint(0, 9)
 
                 if self.shot_board[y][x] not in ('O', 'X', '+'):
                     return (y, x)
+
+        if len(hits) == 1:
+            coords = hits[0]
+            if coords[1]-1 >= 0:
+                if self.shot_board[coords[0]][coords[1]-1] not in ('O', 'X', '+'):
+                    return (coords[0], coords[1]-1)
+            if coords[1]+1 < 10:
+                if self.shot_board[coords[0]][coords[1]+1] not in ('O', 'X', '+'):
+                    return (coords[0], coords[1]+1)
+            if coords[0]-1 >= 0:
+                if self.shot_board[coords[0]-1][coords[1]] not in ('O', 'X', '+'):
+                    return (coords[0]-1, coords[1])
+            if coords[0]+1 < 10:
+                if self.shot_board[coords[0]+1][coords[1]] not in ('O', 'X', '+'):
+                    return (coords[0]+1, coords[1])
+
+        rows = {}
+        cols = {}
+
+        for row, col in hits:
+            if row not in rows:
+                rows[row] = 1
+            else:
+                rows[row] += 1
+            if col not in cols:
+                cols[col] = 1
+            else:
+                cols[col] += 1
+
+        for row in rows:
+
+            current_columns = []
+
+            if rows[row] >= min_value:
+                for y, x in hits:
+                    if y == row:
+                        current_columns.append(x)
+
+                if min(current_columns)-1 >= 0:
+                    if self.shot_board[row][min(current_columns)-1] not in ('O', '+'):
+                        return (row, min(current_columns)-1)
+                if max(current_columns)+1 < 10:
+                    if self.shot_board[row][max(current_columns)+1] not in ('O', '+'):
+                        return (row, max(current_columns)+1)
+
+        for column in cols:
+            current_row = []
+
+            if cols[column] >= min_value:
+                for y, x in hits:
+                    if x == column:
+                        current_row.append(y)
+
+                if min(current_row)-1 >= 0:
+                    if self.shot_board[min(current_row)-1][column] not in ('O', '+'):
+                        return (min(current_row)-1, column)
+                if max(current_row)+1 < 10:
+                    if self.shot_board[max(current_row)+1][row] not in ('O', '+'):
+                        return (max(current_row)+1, column)
+                        
+        if min_value != 1:
+            return self.find_next_shot(min_value=1)
+        
         
                 
 if __name__ == '__main__':
 
     bot = Bot()
-    '''
+    
     bot.shot_board = [['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+                      ['-', '-', '-', '-', '-', '-', '-', 'O', '-', '-'], 
+                      ['-', '-', '-', 'O', 'O', 'O', '-', 'X', '-', '-'], 
+                      ['-', '-', 'O', 'X', 'X', 'X', 'O', 'X', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
-                      ['O', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
-                      ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
-                      ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
-                      ['X', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
-    '''
-    #print(bot.find_next_shot())
-    bot.place_ships()
-    for i in bot.ship_board:
-        print(i)
+                      ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
+    
+    print(bot.find_next_shot())
+    # bot.place_ships()
+    # for i in bot.ship_board:
+    #     print(i)
 
 
