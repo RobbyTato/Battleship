@@ -186,17 +186,17 @@ def game():
             top_text = "Player's turn to take a shot"
 
             if result == "O":
-                player.display_shot_board(top_text=top_text, bottom_text="Miss!")
+                player.display_shot_board(extra=[[shot, Fore.CYAN + Back.LIGHTCYAN_EX]], top_text=top_text, bottom_text="Miss!")
                 playsound(r'./sounds/miss.mp3', False)
                 sleep(2)
 
             elif result == "X" and not sunk:
-                player.display_shot_board(top_text=top_text, bottom_text="Hit!")
+                player.display_shot_board(extra=[[shot, Fore.MAGENTA + Back.LIGHTMAGENTA_EX]], top_text=top_text, bottom_text="Hit!")
                 playsound(r'./sounds/hit.mp3', False)
                 sleep(2)
 
             else:
-                player.display_shot_board(top_text=top_text, bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
+                player.display_shot_board(extra=[[shot, Fore.MAGENTA + Back.LIGHTMAGENTA_EX]], top_text=top_text, bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
                 playsound(r'./sounds/hit sunk.mp3', False)
                 sleep(4)
 
@@ -210,17 +210,17 @@ def game():
             top_text = "Bot's turn to take a shot"
 
             if result == "O":
-                bot.display_shot_board(top_text=top_text, bottom_text="Miss!")
+                bot.display_shot_board(extra=[[list(shot), Fore.CYAN + Back.LIGHTCYAN_EX]], top_text=top_text, bottom_text="Miss!")
                 playsound(r'./sounds/miss.mp3', False)
                 sleep(2)
 
             elif result == "X" and not sunk:
-                bot.display_shot_board(top_text=top_text, bottom_text="Hit!")
+                bot.display_shot_board(extra=[[list(shot), Fore.MAGENTA + Back.LIGHTMAGENTA_EX]], top_text=top_text, bottom_text="Hit!")
                 playsound(r'./sounds/hit.mp3', False)
                 sleep(2)
 
             else:
-                bot.display_shot_board(top_text=top_text, bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
+                bot.display_shot_board(extra=[[list(shot), Fore.MAGENTA + Back.LIGHTMAGENTA_EX]], top_text=top_text, bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
                 playsound(r'./sounds/hit sunk.mp3', False)
                 sleep(4)
 
