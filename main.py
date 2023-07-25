@@ -184,14 +184,16 @@ def game():
             if result == "O":
                 player.display_shot_board(top_text=top_text, bottom_text="Miss!")
                 playsound('sounds/miss.mp3', False)
+                sleep(2)
             elif result == "X" and not sunk:
                 player.display_shot_board(top_text=top_text, bottom_text="Hit!")
                 playsound('sounds/hit.mp3', False)
+                sleep(2)
             else:
                 player.display_shot_board(top_text=top_text,
                                           bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
-                playsound('sounds/hit.mp3', False)
-            sleep(2)
+                playsound('sounds/hit sunk.mp3', False)
+                sleep(4)
             is_player_turn = False
         else:
             shot = bot.find_next_shot()
@@ -201,14 +203,16 @@ def game():
             if result == "O":
                 bot.display_shot_board(top_text=top_text, bottom_text="Miss!")
                 playsound('sounds/miss.mp3', False)
+                sleep(2)
             elif result == "X" and not sunk:
                 bot.display_shot_board(top_text=top_text, bottom_text="Hit!")
                 playsound('sounds/hit.mp3', False)
+                sleep(2)
             else:
                 bot.display_shot_board(top_text=top_text,
                                        bottom_text=f"Hit! Sunk {ships[sunk[0]][0]} {ships[sunk[0]][1]}x1")
-                playsound('sounds/hit.mp3', False)
-            sleep(2)
+                playsound('sounds/hit sunk.mp3', False)
+                sleep(4)
             is_player_turn = True
         if set(player.sunk_ships) == {"c", "b", "d", "s", "p"}:
             ps.print_screen(bot_wins)
