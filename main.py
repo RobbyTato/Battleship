@@ -156,16 +156,19 @@ def check_sunk(player, enemy):
         
 
 def game():
-    # 10 x 10 board grid
+    ''' Main game loop
 
-    # Ship name     Ship size    Name on board (eg. "c")
-    # Carrier	    5            c
-    # Battleship    4            b
-    # Destroyer	    3            d
-    # Submarine	    3            s
-    # Patrol Boat   2            p
+    10 x 10 board grid
 
-    # Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
+    Ship name     Ship size    Name on board (eg. "c")
+    Carrier	    5            c
+    Battleship    4            b
+    Destroyer	    3            d
+    Submarine	    3            s
+    Patrol Boat   2            p
+
+    Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
+    '''
 
     ships = {"c": ["Carrier", 5],
              "b": ["Battleship", 4],
@@ -272,4 +275,5 @@ if __name__ == "__main__":
         if choice == "Exit":
             break
 
-    logging.debug('-------------------------------------------END OF GAME--------------------------------------------------------')
+    if debug:
+        logging.debug('----------------------------------------------END OF GAME--------------------------------------------------------')
