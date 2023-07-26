@@ -118,7 +118,7 @@ class Bot(Player):
                     if self.shot_board[min(current_row)-1][column] not in ('O', '+'):
                         return (min(current_row)-1, column)
                 if max(current_row)+1 < 10:
-                    if self.shot_board[max(current_row)+1][row] not in ('O', '+'):
+                    if self.shot_board[max(current_row)+1][column] not in ('O', '+'):
                         return (max(current_row)+1, column)
                         
         if min_value != 1:
