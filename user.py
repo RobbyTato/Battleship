@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG, filename="logs.txt", filemode="w", form
 
 
 class User(Player):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -74,26 +74,25 @@ class User(Player):
             self.display_ship_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
             while True:
                 key = keyboard.read_event()
-                if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
-                                                              "w", "s", "a", "d", "enter", "space", "r"):
+                if key.event_type == "up" or key.name not in ("w", "s", "a", "d", "space", "r"):
                     continue
                 playsound('sounds/move.mp3', False)
-                if key.name in ("up", "w"):
+                if key.name == "w":
                     if cursor[1] != 0:
                         cursor[1] -= 1
                     else:
                         continue
-                if key.name in ("down", "s"):
+                if key.name == "s":
                     if cursor[1] != 9:
                         cursor[1] += 1
                     else:
                         continue
-                if key.name in ("left", "a"):
+                if key.name == "a":
                     if cursor[0] != 0:
                         cursor[0] -= 1
                     else:
                         continue
-                if key.name in ("right", "d"):
+                if key.name == "d":
                     if cursor[0] != 9:
                         cursor[0] += 1
                     else:
@@ -103,7 +102,7 @@ class User(Player):
                         current_rotation += 1
                     else:
                         current_rotation = 0
-                if key.name in ("enter", "space"):
+                if key.name == "space":
                     if placeable:
                         for i in ship_pos:
                             self.ship_board[i[0]][i[1]] = ship
@@ -136,31 +135,30 @@ class User(Player):
         self.display_shot_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
         while True:
             key = keyboard.read_event()
-            if key.event_type == "up" or key.name not in ("up", "down", "left", "right",
-                                                          "w", "s", "a", "d", "enter", "space"):
+            if key.event_type == "up" or key.name not in ("w", "s", "a", "d", "space"):
                 continue
             playsound('sounds/move.mp3', False)
-            if key.name in ("up", "w"):
+            if key.name == "w":
                 if cursor[1] != 0:
                     cursor[1] -= 1
                 else:
                     continue
-            if key.name in ("down", "s"):
+            if key.name == "s":
                 if cursor[1] != 9:
                     cursor[1] += 1
                 else:
                     continue
-            if key.name in ("left", "a"):
+            if key.name == "a":
                 if cursor[0] != 0:
                     cursor[0] -= 1
                 else:
                     continue
-            if key.name in ("right", "d"):
+            if key.name == "d":
                 if cursor[0] != 9:
                     cursor[0] += 1
                 else:
                     continue
-            if key.name in ("space", "enter"):
+            if key.name == "space":
                 if self.shot_board[cursor[0]][cursor[1]] == "-":
                     return cursor[::-1]
                 else:
@@ -177,7 +175,3 @@ class User(Player):
                 bottom_text = "Cannot take shot here"
             top_text = "Player's turn to take a shot"
             self.display_shot_board(extra=extra, top_text=top_text, bottom_text=bottom_text)
-
-
-
-

@@ -8,7 +8,7 @@ from user import User
 from bot import Bot
 from colorama import Fore, Back, Style
 
-logging.basicConfig(level=logging.DEBUG, filename=r"./logss.txt", filemode="a", format="%(message)s\n")
+logging.basicConfig(level=logging.DEBUG, filename=r"./logs.txt", filemode="a", format="%(message)s\n")
 
 colorama.init()
 
@@ -51,9 +51,9 @@ controls = f'''
 ⠀          {Fore.BLACK + Back.WHITE + Style.DIM}Controls{Style.RESET_ALL}
 
 
-Arrow keys or WASD to navigate
+       WASD to navigate
 
-   Enter or space to select
+      Spacebar to select
 
        R to rotate ship
 '''
@@ -84,20 +84,20 @@ def menu_screen():
 
         # process keyboard input
         key = keyboard.read_event()
-        if key.event_type == "up" or key.name not in ("s", "down", "w", "up", "enter", "space"):
+        if key.event_type == "up" or key.name not in ("s", "w", "space"):
             continue
         playsound('sounds/move.mp3', False)
-        if key.name in ("s", "down"):
+        if key.name == "s":
             if option == len(menu_options) - 1:
                 option = 0
             else:
                 option += 1
-        if key.name in ("w", "up"):
+        if key.name == "w":
             if option == 0:
                 option = len(menu_options) - 1
             else:
                 option -= 1
-        if key.name in ("enter", "space"):
+        if key.name == "space":
             return menu_options[option]
 
         # reload menu
@@ -227,12 +227,12 @@ def game():
 
         if set(player.sunk_ships) == {"c", "b", "d", "s", "p"}:
             ps.print_screen(bot_wins)
-            keyboard.wait('enter')
+            keyboard.wait('space')
             break
 
         elif set(bot.sunk_ships) == {"c", "b", "d", "s", "p"}:
             ps.print_screen(player_wins)
-            keyboard.wait('enter')
+            keyboard.wait('space')
             break
 
 
@@ -243,9 +243,9 @@ if __name__ == "__main__":
             game()
         if choice == "Controls":
             ps.print_screen(controls)
-            keyboard.wait('enter')
+            keyboard.wait('space')
         if choice == "Creators":
             ps.print_screen(creators)
-            keyboard.wait('enter')
+            keyboard.wait('space')
         if choice == "Exit":
             break
