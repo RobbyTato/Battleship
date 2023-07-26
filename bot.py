@@ -7,6 +7,8 @@ class Bot(Player):
         super().__init__()
 
     def place_ships(self):
+        """Places ships on the bot's board
+        """        
 
         ships = {'c':5, 'b':4, 'd':3, 's':3, 'p':2}
 

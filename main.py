@@ -161,11 +161,11 @@ def game():
     10 x 10 board grid
 
     Ship name     Ship size    Name on board (eg. "c")
-    Carrier	    5            c
-    Battleship    4            b
+    Carrier	        5            c
+    Battleship      4            b
     Destroyer	    3            d
     Submarine	    3            s
-    Patrol Boat   2            p
+    Patrol Boat     2            p
 
     Only strings in the shot boards are "O" for miss, "X" for hit, "+" for sunk, and "-" for empty
     '''
