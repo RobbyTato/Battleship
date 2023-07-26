@@ -57,23 +57,23 @@ class Player:
             lines_list.append(i)
         lines_list.append(Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄" + Style.RESET_ALL)  # first row
         for x in range(10):  # add the board
-            line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
+            line = Fore.LIGHTBLACK_EX + "█" + Back.LIGHTBLUE_EX
             for y in range(10):
                 if extra is None:
                     if self.ship_board[y][x] == "-":
-                        line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
+                        line += "    "
                     else:
-                        line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
+                        line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Back.LIGHTBLUE_EX
                 else:
                     for i in extra:
                         if i[0] == [y, x]:
-                            line += i[1] + "▓▓▓▓" + Style.RESET_ALL
+                            line += i[1] + "▓▓▓▓" + Back.LIGHTBLUE_EX
                             break
                     else:
                         if self.ship_board[y][x] == "-":
-                            line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
+                            line += "    "
                         else:
-                            line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Style.RESET_ALL
+                            line += Fore.BLACK + Back.LIGHTBLACK_EX + "▓▓▓▓" + Back.LIGHTBLUE_EX
             line += Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
             lines_list.append(line)
             lines_list.append(line)
@@ -106,27 +106,27 @@ class Player:
             lines_list.append(i)
         lines_list.append(Fore.LIGHTBLACK_EX + "▄" + ("▄" * 40) + "▄" + Style.RESET_ALL)  # first row
         for x in range(10):  # add the board
-            line = Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
+            line = Fore.LIGHTBLACK_EX + "█" + Back.LIGHTBLUE_EX
             for y in range(10):
                 if extra is None:
                     if self.shot_board[y][x] == "-":
-                        line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
+                        line += "    "
                     elif self.shot_board[y][x] == "O":
-                        line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
+                        line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Back.LIGHTBLUE_EX
                     else:
-                        line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
+                        line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Back.LIGHTBLUE_EX
                 else:
                     for i in extra:
                         if i[0] == [y, x]:
-                            line += i[1] + "▓▓▓▓" + Style.RESET_ALL
+                            line += i[1] + "▓▓▓▓" + Back.LIGHTBLUE_EX
                             break
                     else:
                         if self.shot_board[y][x] == "-":
-                            line += Back.LIGHTBLUE_EX + "    " + Style.RESET_ALL
+                            line += "    "
                         elif self.shot_board[y][x] == "O":
-                            line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Style.RESET_ALL
+                            line += Fore.LIGHTBLACK_EX + Back.WHITE + "▓▓▓▓" + Back.LIGHTBLUE_EX
                         else:
-                            line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Style.RESET_ALL
+                            line += Fore.LIGHTRED_EX + Back.RED + "▓▓▓▓" + Back.LIGHTBLUE_EX
             line += Fore.LIGHTBLACK_EX + "█" + Style.RESET_ALL
             lines_list.append(line)
             lines_list.append(line)
