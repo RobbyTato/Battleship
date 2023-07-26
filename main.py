@@ -8,7 +8,7 @@ from user import User
 from bot import Bot
 from colorama import Fore, Back, Style
 
-logging.basicConfig(level=logging.DEBUG, filename="logs.txt", filemode="w", format="%(message)s")
+logging.basicConfig(level=logging.DEBUG, filename=r"./logss.txt", filemode="a", format="%(message)s\n")
 
 colorama.init()
 
@@ -57,7 +57,6 @@ Arrow keys or WASD to navigate
 
        R to rotate ship
 '''
-
 
 creators = f'''
 ⠀                                   {Fore.BLACK + Back.WHITE + Style.DIM}Creators{Style.RESET_ALL}
@@ -181,7 +180,13 @@ def game():
         if is_player_turn:
 
             shot = player.take_shot()[::-1]
+            logging.debug(shot)
+            logging.debug(str(player.ship_board))
+            logging.debug(str(player.shot_board))
+            logging.debug(str(bot.ship_board))
+            logging.debug(str(bot.shot_board))
             result = player.update_boards_on_shot(shot, bot.ship_board)
+            logging.debug(result)
             sunk = check_sunk(bot, player)
             top_text = "Player's turn to take a shot"
 
@@ -205,7 +210,13 @@ def game():
         else:
 
             shot = bot.find_next_shot()
+            logging.debug(shot)
+            logging.debug(str(player.ship_board))
+            logging.debug(str(player.shot_board))
+            logging.debug(str(bot.ship_board))
+            logging.debug(str(bot.shot_board))
             result = bot.update_boards_on_shot(shot, player.ship_board)
+            logging.debug(result)
             sunk = check_sunk(player, bot)
             top_text = "Bot's turn to take a shot"
 

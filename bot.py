@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     bot = Bot()
     
-    bot.shot_board = [['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
+    bot.shot_board = [['X', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
@@ -141,7 +141,7 @@ if __name__ == '__main__':
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], 
                       ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-']]
     
-    print(bot.find_next_shot())
+    print(bot.find_next_shot())     # some error when all ships are placed in the top right corner
     # bot.place_ships()
     # for i in bot.ship_board:
     #     print(i)
